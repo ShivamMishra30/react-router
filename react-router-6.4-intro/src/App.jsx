@@ -7,8 +7,8 @@ import PostDetailPage, {loader as blogPostLoader} from './pages/PostDetail';
 import RootLayout from './components/RootLayout';
 import WelcomePage from './pages/Welcome';
 import ErrorPage from './pages/Error'
-
-
+import DeferredBlogPostsPage, {loader as deferredBlogPostsLoader} from './pages/DeferredBlogPosts';
+import { action as newsletterAction } from './pages/NewsLetter'
 const router = createBrowserRouter([
   {
     path: '/',
@@ -23,8 +23,8 @@ const router = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <BlogPostsPage />,
-            loader: blogPostsLoader,
+            element: <DeferredBlogPostsPage />,
+            loader: deferredBlogPostsLoader,
           },
           {
             path: ':id',
@@ -40,10 +40,10 @@ const router = createBrowserRouter([
       },
     ],
   },
-  // {
-  //   path: '/newsletter',
-  //   action: newsletterAction,
-  // },
+  {
+    path: '/newsletter',
+    action: newsletterAction,
+  },
 ]);
 
 function App() {

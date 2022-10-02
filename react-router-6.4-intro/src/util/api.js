@@ -5,6 +5,13 @@ export async function getPosts() {
   }
   return response.json();
 }
+export async function getSlowPosts() {
+  const response = await fetch("https://jsonplaceholder.typicode.com/posts");
+  if (!response.ok) {
+    throw { message: "Failed to fetch posts.", status: 500 };
+  }
+  return response.json();
+}
 
 export async function getPost(id) {
   const response = await fetch(

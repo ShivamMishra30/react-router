@@ -1,4 +1,4 @@
-import { redirect, useActionData, useNavigate } from 'react-router-dom';
+import { redirect, useActionData, useNavigate, useNavigation } from 'react-router-dom';
 
 import NewPostForm from '../components/NewPostForm';
 import { savePost } from '../util/api';
@@ -6,7 +6,7 @@ import { savePost } from '../util/api';
 function NewPostPage() {
   const navigate = useNavigate();
   const data = useActionData()
-  console.log(data)
+  const navigation = useNavigation()
 
   function cancelHandler() {
     navigate('/blog');
@@ -17,7 +17,7 @@ function NewPostPage() {
     {data && data.status && <p>Invaild Input Values</p>}
       <NewPostForm
         onCancel={cancelHandler}
-        submitting={false}
+        submitting={navigation.state === 'submitting'}
       />
     </>
   );
@@ -31,14 +31,9 @@ export async function action({request}){
     title: formData.get('title'),
     body: formData.get('post-text')
   }
-  try {
-    await savePost(post)
-  } catch (error) {
-    console.log(error)
-    if(error.status === 422) {
-      return error
-    };
-    throw error 
+   const validationError = await savePost(post);
+  if (validationError) {
+    return validationError;
   }
-  return redirect('/blog')
+  return redirect('/blog');
 }
